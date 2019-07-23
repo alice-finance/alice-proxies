@@ -1,0 +1,36 @@
+{
+  "name": "@alice-finance/alice-proxies",
+  "version": "1.0.0",
+  "files": [
+    "abis",
+    "contracts",
+    "networks"
+  ],
+  "repository": "https://github.com/alice-finance/alice-proxies",
+  "bugs": {
+    "url": "https://github.com/alice-finance/alice-proxies/issues"
+  },
+  "homepage": "https://github.com/alice-finance/alice-proxies",
+  "author": "Yoonjae Yoo",
+  "license": "MIT",
+  "scripts": {
+    "build": "./node_modules/.bin/truffle compile --all && node scripts/build.js",
+    "test": "./node_modules/.bin/truffle test",
+    "prepublish": "yarn build"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn build"
+    }
+  },
+  "dependencies": {
+    "dotenv": "^8.0.0",
+    "loom-truffle-provider": "^0.13.0",
+    "openzeppelin-solidity": "^2.3.0",
+    "readline-sync": "^1.4.9",
+    "truffle": "^5.0.19"
+  },
+  "devDependencies": {
+    "husky": "^2.3.0"
+  }
+}
