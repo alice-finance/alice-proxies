@@ -36,16 +36,30 @@ module.exports = {
     extdev: {
       provider: () => {
         const provider = new LoomTruffleProvider(
-            process.env.CHAIN_ID,
-            process.env.WRITE_URL,
-            process.env.READ_URL,
-            process.env.PRIVATE_KEY
+            "extdev-plasma-us1",
+            "http://extdev-plasma-us1.dappchains.com:80/rpc",
+            "http://extdev-plasma-us1.dappchains.com:80/query",
+            process.env.ADMIN_PRIVATE_KEY
         );
         const engine = provider.getProviderEngine();
-        engine.addCustomMethod('web3_clientVersion', () => '');
-        return provider
+        engine.addCustomMethod("web3_clientVersion", () => "");
+        return provider;
       },
-      network_id: '*'
+      network_id: "*"
+    },
+    plasma: {
+      provider: () => {
+        const provider = new LoomTruffleProvider(
+            "default",
+            "http://plasma.dappchains.com:80/rpc",
+            "http://plasma.dappchains.com:80/query",
+            process.env.ADMIN_PRIVATE_KEY
+        );
+        const engine = provider.getProviderEngine();
+        engine.addCustomMethod("web3_clientVersion", () => "");
+        return provider;
+      },
+      network_id: "*"
     }
   },
 
@@ -57,13 +71,13 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.5.2",    // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.5.11",    // Fetch exact version from solc-bin (default: truffle's version)
       settings: {          // See the solidity docs for advice about optimization and evmVersion
        optimizer: {
-         enabled: false,
+         enabled: true,
          runs: 200
        },
-       evmVersion: "byzantium"
+       evmVersion: "constantinople"
       }
     }
   }

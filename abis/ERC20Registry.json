@@ -15,7 +15,8 @@
     "outputs": [
       {
         "name": "",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "payable": false,
@@ -29,7 +30,8 @@
     "outputs": [
       {
         "name": "",
-        "type": "bool"
+        "type": "bool",
+        "internalType": "bool"
       }
     ],
     "payable": false,
@@ -41,7 +43,8 @@
     "inputs": [
       {
         "name": "newOwner",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "name": "transferOwnership",
@@ -55,16 +58,24 @@
     "inputs": [
       {
         "indexed": false,
-        "name": "localAddress",
-        "type": "address"
+        "name": "id",
+        "type": "uint256",
+        "internalType": "uint256"
       },
       {
         "indexed": false,
-        "name": "foreignAddress",
-        "type": "address"
+        "name": "ethAddress",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "indexed": false,
+        "name": "name",
+        "type": "string",
+        "internalType": "string"
       }
     ],
-    "name": "AddressRegistered",
+    "name": "TokenRegistered",
     "type": "event"
   },
   {
@@ -72,16 +83,24 @@
     "inputs": [
       {
         "indexed": false,
-        "name": "localAddress",
-        "type": "address"
+        "name": "id",
+        "type": "uint256",
+        "internalType": "uint256"
       },
       {
         "indexed": false,
-        "name": "foreignAddress",
-        "type": "address"
+        "name": "ethAddress",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "indexed": false,
+        "name": "name",
+        "type": "string",
+        "internalType": "string"
       }
     ],
-    "name": "AddressUnregistered",
+    "name": "TokenUnregistered",
     "type": "event"
   },
   {
@@ -90,12 +109,14 @@
       {
         "indexed": true,
         "name": "previousOwner",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       },
       {
         "indexed": true,
         "name": "newOwner",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "name": "OwnershipTransferred",
@@ -105,16 +126,39 @@
     "constant": false,
     "inputs": [
       {
-        "name": "localAddress",
-        "type": "address"
+        "name": "ethAddress",
+        "type": "address",
+        "internalType": "address"
       },
       {
-        "name": "foreignAddress",
-        "type": "address"
+        "name": "localAddress",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "symbol",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "decimals",
+        "type": "uint8",
+        "internalType": "uint8"
       }
     ],
-    "name": "registerAddressMapping",
-    "outputs": [],
+    "name": "register",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
@@ -123,11 +167,12 @@
     "constant": false,
     "inputs": [
       {
-        "name": "localAddress",
-        "type": "address"
+        "name": "id",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
-    "name": "unregisterAddressMapping",
+    "name": "unregister",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -136,33 +181,97 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "getRegisteredERC20Tokens",
+    "name": "getRegisteredTokens",
     "outputs": [
       {
         "components": [
           {
+            "name": "registered",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
             "name": "name",
-            "type": "string"
+            "type": "string",
+            "internalType": "string"
           },
           {
             "name": "symbol",
-            "type": "string"
+            "type": "string",
+            "internalType": "string"
           },
           {
             "name": "decimals",
-            "type": "uint8"
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "ethAddress",
+            "type": "address",
+            "internalType": "address"
           },
           {
             "name": "localAddress",
-            "type": "address"
-          },
-          {
-            "name": "foreignAddress",
-            "type": "address"
+            "type": "address",
+            "internalType": "address"
           }
         ],
         "name": "",
-        "type": "tuple[]"
+        "type": "tuple[]",
+        "internalType": "struct ERC20Registry.ERC20Token[]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "id",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "name": "getToken",
+    "outputs": [
+      {
+        "components": [
+          {
+            "name": "registered",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "decimals",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "ethAddress",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "localAddress",
+            "type": "address",
+            "internalType": "address"
+          }
+        ],
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct ERC20Registry.ERC20Token"
       }
     ],
     "payable": false,

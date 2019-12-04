@@ -16,6 +16,7 @@
   "scripts": {
     "build": "./node_modules/.bin/truffle compile --all && node scripts/build.js",
     "test": "./node_modules/.bin/truffle test",
+    "prettier": "./node_modules/.bin/prettier contracts/**/*.sol --write ",
     "prepublish": "yarn build"
   },
   "husky": {
@@ -31,6 +32,8 @@
     "truffle": "^5.0.19"
   },
   "devDependencies": {
-    "husky": "^2.3.0"
+    "husky": "^2.3.0",
+    "prettier": "^1.17.1",
+    "prettier-plugin-solidity": "^1.0.0-alpha.22"
   }
 }

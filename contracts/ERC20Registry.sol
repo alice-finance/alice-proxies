@@ -2,55 +2,65 @@ pragma solidity >=0.5.0 <0.6.0;
 pragma experimental ABIEncoderV2;
 
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
-import "openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
 
 
 contract ERC20Registry is Ownable {
     struct ERC20Token {
+        bool registered;
         string name;
         string symbol;
         uint8 decimals;
+        address ethAddress;
         address localAddress;
-        address foreignAddress;
     }
 
-    event AddressRegistered(address localAddress, address foreignAddress);
-    event AddressUnregistered(address localAddress, address foreignAddress);
+    event TokenRegistered(uint256 id, address ethAddress, string name);
+    event TokenUnregistered(uint256 id, address ethAddress, string name);
 
-    mapping(address => address) private addressMapping;
-    address[] private localAddresses;
+    ERC20Token[] private tokens;
+    mapping(address => uint256) private ethId;
+    mapping(address => uint256) private localId;
 
-    function registerAddressMapping(address localAddress, address foreignAddress) public onlyOwner {
-        require(addressMapping[localAddress] == address(0), "localAddress already registered");
-        addressMapping[localAddress] = foreignAddress;
-        localAddresses.push(localAddress);
+    function register(address ethAddress, address localAddress, string memory name, string memory symbol, uint8 decimals) public onlyOwner returns (bool) {
+        uint256 id = tokens.length;
+        tokens.length += 1;
 
-        emit AddressRegistered(localAddress, foreignAddress);
+        tokens[id].registered = true;
+        tokens[id].name = name;
+        tokens[id].symbol = symbol;
+        tokens[id].decimals = decimals;
+        tokens[id].ethAddress = ethAddress;
+        tokens[id].localAddress = localAddress;
+
+        localId[localAddress] = id;
+        ethId[ethAddress] = id;
+
+        emit TokenRegistered(id, ethAddress, name);
+        return true;
     }
 
-    function unregisterAddressMapping(address localAddress) public onlyOwner {
-        require(addressMapping[localAddress] != address(0), "localAddress not registered");
-        address foreignAddress = addressMapping[localAddress];
-        delete addressMapping[localAddress];
-        for (uint i = 0; i < localAddresses.length; i++) {
-            if (localAddresses[i] == localAddress) {
-                localAddresses[i] = localAddresses[localAddresses.length - 1];
-                localAddresses.length -= 1;
-                break;
-            }
+    function unregister(uint256 id) public onlyOwner {
+        require(tokens.length > 0);
+        require(tokens[id].registered == true);
+
+        emit TokenUnregistered(id, tokens[id].ethAddress, tokens[id].name);
+
+        delete ethId[tokens[id].ethAddress];
+        delete localId[tokens[id].localAddress];
+
+        tokens[id] = tokens[tokens.length - 1];
+
+        if (tokens.length > 0) {
+            ethId[tokens[id].ethAddress] = id;
+            localId[tokens[id].localAddress] = id;
         }
-
-        emit AddressUnregistered(localAddress, foreignAddress);
     }
 
-    function getRegisteredERC20Tokens() public view returns (ERC20Token[] memory) {
-        ERC20Token[] memory tokens = new ERC20Token[](localAddresses.length);
-        for (uint i = 0; i < localAddresses.length; i++) {
-            address localAddress = localAddresses[i];
-            address foreignAddress = addressMapping[localAddress];
-            ERC20Detailed erc20 = ERC20Detailed(localAddress);
-            tokens[i] = ERC20Token(erc20.name(), erc20.symbol(), erc20.decimals(), localAddress, foreignAddress);
-        }
+    function getRegisteredTokens() public view returns (ERC20Token[] memory) {
         return tokens;
+    }
+
+    function getToken(uint256 id) public view returns (ERC20Token memory) {
+        return tokens[id];
     }
 }

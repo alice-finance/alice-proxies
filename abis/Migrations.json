@@ -6,7 +6,8 @@
     "outputs": [
       {
         "name": "",
-        "type": "uint256"
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "payable": false,
@@ -20,7 +21,8 @@
     "outputs": [
       {
         "name": "",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "payable": false,
@@ -38,7 +40,8 @@
     "inputs": [
       {
         "name": "completed",
-        "type": "uint256"
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "name": "setCompleted",
@@ -52,7 +55,8 @@
     "inputs": [
       {
         "name": "new_address",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "name": "upgrade",
